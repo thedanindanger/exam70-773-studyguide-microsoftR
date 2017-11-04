@@ -1,0 +1,71 @@
+---
+title: "Exam 70-773 Analyzing Big Data with R Study Guide"
+output: html_document
+---
+
+# Introduction
+This document is a study guide for Microsfot Exam 70-773: Analyzing Big Data with Microsoft R.
+
+I have used R a lot in the past, but never really played with Microsoft R or its predessor Revolution R. Whenever I need to do anything with 'big data' I would just use python or scala in Spark.
+
+But I figured it would be a fun challenge to take 70-773, and since I've been using Azure a bunch lately, it makes sense to grab an MSCE, so I should be making a few more of these studyguides.
+
+The format will follow the same topics as outlined toward the bottom of the [70-773 Exam Page](https://www.microsoft.com/en-us/learning/exam-70-773.aspx)
+
+But first we have to set up our system
+
+# Installing "Microsoft R"
+
+Why is that in quotes? Because there apparently is no longer any such thing as "Microsoft R" at least not as a server anyway, unless you use Azure, which is kind of the only reason anyone uses microsoft R in the first place...  But I digress.
+
+"Microsoft R" is now mostly called RevoScaleR and is included in the Microsoft Machine Learning Server. Microsoft ML also functions as a python and F-Sharp server. 
+
+# Read and Explore Big Data
+## Read supported data file formats
+This is a bit vague, but they mention SAS and SPSS specifically, so we should probably highlight that syntax. 
+
+Fortunately Machine Learning server comes with a bunch of sample data sets for just this purpose. Here is the [Documentation](https://docs.microsoft.com/en-us/machine-learning-server/r/how-to-revoscaler-data-import)
+```{r}
+list.files(rxGetOption("sampleDataDir"))
+```
+
+We'll just use one of those for syntax demostration. Grabbing the data is straightforward, but difficult to remember the syntax.
+
+```{r}
+txtSource <- file.path(rxGetOption("sampleDataDir"),"claims.txt")
+
+```
+
+Let's break that down a little, also remember we can always use ?<the function name> as a command in R to learn more, and it seems to work in Microsoft R as well
+
+#### file.path
+
+`?file.path` is a frequently used function in R to give us a platform independent file path. Anyone who has had to deal with confusion back and forward slashes can appreciate this.
+
+In this case we are using the rxGetOption commmand to pull the directory of sample data stored on our local or remote machine.
+
+#### rxOptions
+
+`?rxOptions` now this is our first Microsoft R specific command, and it's a big one, it's used to set options for all the different attributes of a RevoScaler Session. It does not need to be called for every execution, just once per session. These are global configuration.
+
+But the above example uses   `rxGetOption` not `rxOptions`, what's the difference? rxOptions is for setting options while rxGetOptions is for retreival of a single option parameter. In our case that is the current sample data directory.
+
+Let's break down what's happening for some clarity.
+
+```{r}
+rxGetOption("sampleDataDir")
+# Returns "C:/Program Files/Microsoft/ML Server/R_SERVER/library/RevoScaleR/SampleData"
+
+rxGetOption("claims.txt")
+# Returns NULL as this isn't a configuration option
+
+file.path(rxGetOption("sampleDataDir"), "claims.txt")
+# Returns "C:/Program Files/Microsoft/ML Server/R_SERVER/library/RevoScaleR/SampleData/claims.txt"
+
+```
+So all we are do
+
+
+### Reading and writing to SQL
+
+https://docs.microsoft.com/en-us/machine-learning-server/r/sample-built-in-data
